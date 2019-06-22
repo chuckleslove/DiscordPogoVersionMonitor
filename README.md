@@ -2,6 +2,8 @@ npm install discord.js
 
 npm install request
 
+copy/rename config.example.json to config.json and fill in settings as desired/required
+
 **Config options:**
 
 **token** - Bot Token, required
