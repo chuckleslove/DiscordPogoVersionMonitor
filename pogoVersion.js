@@ -51,8 +51,7 @@ async function UpdateLoop()
     if(!message)
     {
         message = await bot.channels.get(config.channel).send(messageToSend).catch(console.error);
-        message = message.id;
-        
+        message = message.id;        
     }
     else
     {
@@ -61,6 +60,5 @@ async function UpdateLoop()
 
     console.log("Waiting "+queryDelay/1000+" seconds to check for version update");
     setTimeout(UpdateLoop,queryDelay);
-    return;
-    
+    return;    
 }
