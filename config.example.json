@@ -1,0 +1,7 @@
+{
+    "token": "",
+    "channel": "",
+    "users": [""],
+    "queryDelay": 60000,
+    "delayAfterForce": 300000
+}
