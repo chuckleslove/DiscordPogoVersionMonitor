@@ -44,6 +44,7 @@ async function UpdateLoop()
         {
             messageToSend += "<@"+config.users[i]+">";
         }
+        message = "";
         version = currentVersion;
         queryDelay = config.delayAfterForce;
     }
@@ -55,10 +56,9 @@ async function UpdateLoop()
     }
     else
     {
-        bot.channels.get(config.channel).messages.get(message).edit(messageToSend).catch(console.error);
+        await bot.channels.get(config.channel).messages.get(message).edit(messageToSend).catch(console.error);
     }
-
-    console.log("Waiting "+queryDelay/1000+" seconds to check for version update");
+    
     setTimeout(UpdateLoop,queryDelay);
     return;    
 }
