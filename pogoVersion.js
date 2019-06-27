@@ -15,14 +15,12 @@ const newMessageTimeout = config.newMessageTimer ? config.newMessageTimer * 60 *
 setInterval(function()  {
     if(!config.newMessageTimer) { return; }
 
-    message = "";
-    console.log("message cleared");
+    message = "";   
     return;
 
 },newMessageTimeout);
 
 bot.on('ready', () => {
-    console.log("New Message Timeout: "+newMessageTimeout);
     return UpdateLoop();    
 });
 
