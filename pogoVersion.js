@@ -9,8 +9,21 @@ var version = "";
 var message = "";
 var lastUpdate = "";
 
+//convert hours to milliseconds, default is check every 24 hours
+const newMessageTimeout = config.newMessageTimer ? config.newMessageTimer * 60 * 60 * 1000 : 86400000;
+
+setInterval(function()  {
+    if(!config.newMessageTimer) { return; }
+
+    message = "";
+    console.log("message cleared");
+    return;
+
+},newMessageTimeout);
+
 bot.on('ready', () => {
-    return UpdateLoop();
+    console.log("New Message Timeout: "+newMessageTimeout);
+    return UpdateLoop();    
 });
 
 function VersionQuery()
@@ -51,7 +64,8 @@ async function UpdateLoop()
 
     if(!message)
     {
-        message = await bot.channels.get(config.channel).send(messageToSend).catch(console.error);
+        message = await bot.channels.get(config.channel).send(messageToSend).
+        catch(console.error);
         message = message.id;        
     }
     else

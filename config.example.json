@@ -3,5 +3,6 @@
     "channel": "",
     "users": [""],
     "queryDelay": 60000,
-    "delayAfterForce": 300000
+    "delayAfterForce": 300000,
+    "newMessageTimer": 24
 }
