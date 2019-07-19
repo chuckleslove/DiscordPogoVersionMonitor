@@ -4,5 +4,9 @@
     "users": [""],
     "queryDelay": 60000,
     "delayAfterForce": 300000,
-    "newMessageTimer": 24
+    "webhooks": [
+        {"id":"",
+        "token":"",
+        "role":"everyone"}
+    ]
 }

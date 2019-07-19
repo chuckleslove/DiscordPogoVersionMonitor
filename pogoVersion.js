@@ -9,16 +9,6 @@ var version = "";
 var message = "";
 var lastUpdate = "";
 
-//convert hours to milliseconds, default is check every 24 hours
-const newMessageTimeout = config.newMessageTimer ? config.newMessageTimer * 60 * 60 * 1000 : 86400000;
-
-setInterval(function()  {
-    if(!config.newMessageTimer) { return; }
-
-    message = "";   
-    return;
-
-},newMessageTimeout);
 
 bot.on('ready', () => {
     
@@ -52,10 +42,11 @@ async function UpdateLoop()
     if(version != currentVersion && currentVersion != "Version Query Failed" && version != "Version Query Failed")
     {
         messageToSend = "PoGo version FORCED to: "+currentVersion+" from: "+version+" Last updated at: "+lastUpdate+"\n";
+        SendVersionForceToWebhooks(version, currentVersion);
         for(var i = 0; i < config.users.length; i++)
         {
             messageToSend += "<@"+config.users[i]+">";
-        }
+        }        
         await bot.channels.get(config.channel).messages.get(message).delete().catch(console.error);
         await bot.channels.get(config.channel).send(messageToSend).catch(console.error);
         message = "";
@@ -66,7 +57,8 @@ async function UpdateLoop()
     {
         message = await bot.channels.get(config.channel).send(messageToSend).
         catch(console.error);
-        message = message.id;         
+        message = message.id; 
+        version = '0.147.1'   ;
           
     }
     else
@@ -78,4 +70,37 @@ async function UpdateLoop()
     
     setTimeout(UpdateLoop,queryDelay);
     return;    
+}
+
+
+async function SendVersionForceToWebhooks(oldVersion, newVersion)
+{
+
+    let webhookMessage = {};
+    
+    webhookMessage.embeds = [{title:"VERSION FORCED",fields:[{name:"Old Version",value:oldVersion,inline:true},{name:"New Version",value:newVersion,inline:true}]}];
+
+    for(let i = 0; i < config.webhooks.length; i++)
+    {
+        
+        let hook = new Discord.WebhookClient(config.webhooks[i].id,config.webhooks[i].token);
+
+        await hook.send(webhookMessage).catch(console.error);
+
+        if(config.webhooks[i].role)
+        {
+            let role = config.webhooks[i].role;
+            if(role != "everyone" && role != "here")
+            {
+                role = "<@&"+role+">";
+            }
+            else
+            {
+                role = "@"+role;
+            }
+            let content = "Version forced! "+role;            
+            await hook.send(content).catch(console.error);
+        }
+    }    
+
 }
