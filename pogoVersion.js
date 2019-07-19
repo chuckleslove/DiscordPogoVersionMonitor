@@ -57,8 +57,7 @@ async function UpdateLoop()
     {
         message = await bot.channels.get(config.channel).send(messageToSend).
         catch(console.error);
-        message = message.id; 
-        version = '0.147.1'   ;
+        message = message.id;       
           
     }
     else
