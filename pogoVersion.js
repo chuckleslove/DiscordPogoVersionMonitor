@@ -21,6 +21,7 @@ setInterval(function()  {
 },newMessageTimeout);
 
 bot.on('ready', () => {
+    
     return UpdateLoop();    
 });
 
@@ -33,7 +34,7 @@ function VersionQuery()
             {
                 return resolve("Version Query Failed");
             }        
-            lastUpdate = new Date().toLocaleTimeString();
+            lastUpdate = new Date().toLocaleTimeString();            
             return resolve(body.slice(2));
         });
     });
@@ -48,28 +49,32 @@ async function UpdateLoop()
 
     let messageToSend = "Current PoGo forced version is: "+version+" Last updated at: "+lastUpdate;
 
-    if(version != currentVersion)
+    if(version != currentVersion && currentVersion != "Version Query Failed" && version != "Version Query Failed")
     {
         messageToSend = "PoGo version FORCED to: "+currentVersion+" from: "+version+" Last updated at: "+lastUpdate+"\n";
         for(var i = 0; i < config.users.length; i++)
         {
             messageToSend += "<@"+config.users[i]+">";
         }
+        await bot.channels.get(config.channel).messages.get(message).delete().catch(console.error);
+        await bot.channels.get(config.channel).send(messageToSend).catch(console.error);
         message = "";
         version = currentVersion;
         queryDelay = config.delayAfterForce;
     }
-
-    if(!message)
+    else if(!message)
     {
         message = await bot.channels.get(config.channel).send(messageToSend).
         catch(console.error);
-        message = message.id;        
+        message = message.id;         
+          
     }
     else
     {
         await bot.channels.get(config.channel).messages.get(message).edit(messageToSend).catch(console.error);
     }
+
+    
     
     setTimeout(UpdateLoop,queryDelay);
     return;    
